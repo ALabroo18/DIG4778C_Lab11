@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryItem : MonoBehaviour
+public class InventoryItem
 {
-    private int ID;
-    private string Name;
+    public int ID;
+    public string Name;
     private int value;
 
 
@@ -32,5 +32,4 @@ public class InventoryItem : MonoBehaviour
     {
         
     }
-    int get
 }
