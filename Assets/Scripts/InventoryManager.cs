@@ -6,6 +6,7 @@ public class InventoryManager : MonoBehaviour
     // Name the user inputs in the inspector to see if the inventory contains it.
     [SerializeField] private string inventoryItemName;
     [SerializeField] private int inventoryItemID;
+    [SerializeField] private int inventoryItemValue;
 
     // Array of names for the inventory items.
     private string[] inventoryNames = { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb", 
@@ -40,6 +41,12 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("didnt find anything.");
             }
+        }
+        // TO DO: If Q key is pressed, perform a quick sort 
+        else if (Input.GetKeyDown(KeyCode.Q)) 
+        {
+            partition(inventoryList, 0, inventoryList.Count - 1);
+            QuickSortByValue(inventoryList, 0, inventoryList.Count - 1);
         }
     }
 
@@ -101,4 +108,214 @@ public class InventoryManager : MonoBehaviour
 
         return -1; // Return -1 if the target is not found
     }
+
+    // TO DO: Partition used for Quick Sort
+    public int partition(List<InventoryItem> list, int first, int last)
+    {
+        InventoryItem[] listToArray = list.ToArray();
+        
+        int pivot = last;
+        int smaller = first - 1;
+
+        for (int element = first; element < last; element++)
+        {
+            if (element < pivot)
+            {
+                element++;
+
+                int temporary = smaller;
+                listToArray[smaller] = listToArray[element];
+                element = temporary;
+            }
+        }
+
+        int temporaryNext = smaller + 1;
+        listToArray[smaller + 1] = listToArray[last];
+        last = temporaryNext;
+
+        return smaller + 1;
+    }
+
+    // TO DO: Quick Sort Method
+    public void QuickSortByValue(List<InventoryItem> list, int first, int last)
+    {
+        InventoryItem[] array = list.ToArray();
+
+
+        if (array[first].value < array[last].value)
+        {
+            /*int pivot = partition(array, first, last);
+
+            QuickSortByValue(array, first, pivot - 1);
+            QuickSortByValue(array, pivot + 1, last);*/
+
+        }
+    }
 }
+
+/* using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InventoryManager : MonoBehaviour
+{
+    //public int inventoryNames;
+    private List <InventoryItem>inventoryList = new List<InventoryItem>();
+    InventoryItem[] iLArray;
+
+    private void Start()
+    {
+        //Make random number of values and ID's
+        //
+        string [] arr = { "Liam", "Anish", "Dylan" };
+        for (int i = 0; i < 5; i++) 
+        {
+            inventoryList.Add(new InventoryItem(i, arr[Random.Range(0, arr.Length - 1)], Random.Range(0, 37)));
+        }
+
+        iLArray = inventoryList.ToArray();
+        Debug.Log("UNSORTED ARRAY: ");
+        DisplayInDebug(iLArray);
+
+        QuickSortByValue(iLArray, 1, iLArray.Length - 1);
+        Debug.Log("QUICK SORTED ARRAY: ");
+        DisplayInDebug(iLArray);
+
+    }
+
+    [SerializeField] private string inventoryName;
+
+// _________________________________________________________________________________________________________
+// TEST METHODS
+
+    public int partition(InventoryItem[] array, int first, int last)
+    {
+        int pivot = last;
+        int smaller = first - 1;
+
+        for (int element = first; element < last; element++)
+        {
+            if (element < pivot)
+            {
+                element++;
+
+                int temporary = smaller;
+                array[smaller] = array[element];
+                element = temporary;
+            }
+        }
+
+        int temporaryNext = smaller + 1;
+        array[smaller + 1] = array[last];
+        last = temporaryNext;
+
+        return smaller + 1;
+
+    }
+
+
+
+    public void QuickSortByValue(InventoryItem[] array, int first, int last)
+    {
+        if (array[first].value < array[last].value)
+        {
+            int pivot = partition(array, first, last);
+
+            QuickSortByValue(array, first, pivot - 1);
+            QuickSortByValue(array, pivot + 1, last);
+
+        }
+    }
+
+    void DisplayInDebug(InventoryItem[] displayedArray) 
+    {
+        //Debug.Log(displayedArray.Length);
+        for (int i = 0; i < displayedArray.Length; i++) 
+        {
+            //Debug.Log("LOOP " + i);
+            Debug.Log("ID: " + displayedArray[i].ID + "\nName: " + displayedArray[i].Name + "\nValue: " + displayedArray[i].value);
+        }
+    }
+
+    void Update()
+    {
+        
+    }
+
+}
+
+// _________________________________________________________________________________________________________
+// EXAMPLE METHODS
+  public int partition(InventoryItem[] array, int first, int last)
+    {
+        int pivot = last;
+        int smaller = (first - 1);
+
+        for (int element = first; element < last; element++)
+        {
+            if (element < pivot)
+            {
+                element++;
+
+                int temporary = smaller;
+                array[smaller] = array[element];
+                element = temporary;
+            }
+        }
+
+        int temporaryNext = smaller + 1;
+        array[smaller + 1] = array[last];
+        last = temporaryNext;
+
+        return smaller + 1;
+    }
+
+    public void QuickSortByValue(InventoryItem[] array, int first, int last)
+    {
+        if (first < last)
+        {
+            int pivot = partition(array, first, last);
+
+            QuickSortByValue(array, first, pivot - 1);
+            QuickSortByValue(array, pivot + 1, last);
+
+        }
+    }
+  
+  public int partition(int []array, int first, int last)
+  {
+    int pivot = array[last];
+    int smaller = (first - 1);
+
+    for (int element = first; element < last; element++)
+    {
+      if (array[element] < pivot)
+      {
+        element++;
+
+        int temporary = array[smaller];
+        array[smaller] = array[element];
+        array[element] = temporary;
+      }
+    }
+
+    int temporaryNext = array[smaller + 1];
+    array[smaller + 1] = array[last];
+    array[last] = temporaryNext;
+
+    return smaller + 1;
+
+  }
+
+  public void quickSort(int []array, int first, int last)
+  {
+    if (first < last)
+    {
+      int pivot = partition(array, first, last);
+
+      quickSort(array, first, pivot - 1);
+      quickSort(array, pivot + 1, last);
+
+    }
+  }
+*/
