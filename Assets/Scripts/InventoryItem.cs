@@ -6,10 +6,7 @@ public class InventoryItem
 {
     public int ID;
     public string Name;
-    private int value;
-
-
-
+    public int value;
 
     public InventoryItem(int ID, string Name, int value)
     {
@@ -17,19 +14,9 @@ public class InventoryItem
         this.Name = Name;
         this.value = value;
     }
-    void Awake()
+
+    private void Awake()
     {
 
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
