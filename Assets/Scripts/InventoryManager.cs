@@ -7,9 +7,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private string inventoryItemName;
     [SerializeField] private int inventoryItemID;
 
-    // Array of names for the inventory items.
-    private string[] inventoryNames = { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb", 
-        "avery", "rifle", "computer", "mouse", "money" };
+    // List of names for the inventory items.
+    private List<string> inventoryNames = new List<string> { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb", 
+        "avery", "rifle", "computer", "mouse", "money", "monkey", "elephant", "monitor" };
 
     // List of InventoryItems that will be used to store the inventory.
     private List <InventoryItem>inventoryList = new List<InventoryItem>();
@@ -46,14 +46,42 @@ public class InventoryManager : MonoBehaviour
     // Populate the inventory with random entries.
     private void InitializeInventory()
     {
-        int inventorySize = inventoryNames.Length;
+        int inventorySize = inventoryNames.Count;
 
         // For each name in the inventoryNames array, create a new InventoryItem with a random ID and value.
         for (int i = 0; i < inventorySize; i++)
         {
-            InventoryItem item = new InventoryItem(Random.Range(0, 73), inventoryNames[Random.Range(0, inventoryNames.Length - 1)], 
-                Random.Range(0, 100));
+            // Get a random name from the inventoryNames list.
+            string itemName = inventoryNames[Random.Range(0, inventoryNames.Count - 1)];
+            int itemID = Random.Range(0, inventorySize);
+            int itemValue = Random.Range(0, 100);
 
+            // Create a new inventory item with a random ID and value that uses the above random name.
+            InventoryItem item = new InventoryItem(itemID, itemName, itemValue);
+
+            for (int j = 0; j < inventoryList.Count; j++)
+            {
+                bool duplicate = false;
+
+                if ((inventoryList[j].Name == itemName) || (inventoryList[j].ID.ToString() == itemID.ToString()) ||
+                    (inventoryList[j].value.ToString() == itemValue.ToString()))
+                {
+                    duplicate = true;
+                }
+                
+                while (duplicate)
+                {
+                    Debug.Log("Duplicate found, removing from inventoryNames list.");
+                    inventoryNames.Remove(itemName);
+                    break;
+                }
+                duplicate = false;
+            }
+
+            // Remove the name from the inventoryNames list so it cannot be used again.
+            inventoryNames.Remove(itemName);
+
+            // Add the new item to the inventory list.
             inventoryList.Add(item);
         }
     }
@@ -66,7 +94,7 @@ public class InventoryManager : MonoBehaviour
             if (list[i].Name == target)
             {
                 // If the target is found, debug where it was found and exit the funciton.
-                Debug.Log($"{target} found at index {i} in the inventory.");
+                Debug.Log($"{target} found at index {i} in the inventory with ID of {list[i].ID} and value of {list[i].value}.");
                 return;
             }
         }
@@ -80,6 +108,7 @@ public class InventoryManager : MonoBehaviour
     {
         int left = 0;
         int right = list.Count - 1;
+        Debug.Log(list[target].ID + list[target].Name);
 
         while (left <= right)
         {
