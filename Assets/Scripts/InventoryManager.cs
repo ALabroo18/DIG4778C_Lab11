@@ -45,7 +45,7 @@ public class InventoryManager : MonoBehaviour
         // TO DO: If Q key is pressed, perform a quick sort 
         else if (Input.GetKeyDown(KeyCode.Q)) 
         {
-            partition(inventoryList, 0, inventoryList.Count - 1);
+            //partition(inventoryList, 0, inventoryList.Count - 1);
             QuickSortByValue(inventoryList, 0, inventoryList.Count - 1);
         }
     }
@@ -112,26 +112,24 @@ public class InventoryManager : MonoBehaviour
     // TO DO: Partition used for Quick Sort
     public int partition(List<InventoryItem> list, int first, int last)
     {
-        InventoryItem[] listToArray = list.ToArray();
-        
-        int pivot = last;
+        InventoryItem pivotItem = list[last];
         int smaller = first - 1;
 
         for (int element = first; element < last; element++)
         {
-            if (element < pivot)
+            if (list[element].value < pivotItem.value)
             {
                 element++;
 
-                int temporary = smaller;
-                listToArray[smaller] = listToArray[element];
-                element = temporary;
+                InventoryItem temporary = list[smaller + 1];
+                list[smaller] = list[element];
+                list[element] = temporary;
             }
         }
 
-        int temporaryNext = smaller + 1;
-        listToArray[smaller + 1] = listToArray[last];
-        last = temporaryNext;
+        InventoryItem temporaryNext = list[smaller + 1];
+        list[smaller + 1] = list[last];
+        list[last] = temporaryNext;
 
         return smaller + 1;
     }
@@ -139,16 +137,18 @@ public class InventoryManager : MonoBehaviour
     // TO DO: Quick Sort Method
     public void QuickSortByValue(List<InventoryItem> list, int first, int last)
     {
-        InventoryItem[] array = list.ToArray();
-
-
-        if (array[first].value < array[last].value)
+        if (list[first].value < list[last].value)
         {
-            /*int pivot = partition(array, first, last);
+            int pivot = partition(list, first, last);
 
-            QuickSortByValue(array, first, pivot - 1);
-            QuickSortByValue(array, pivot + 1, last);*/
+            QuickSortByValue(list, first, pivot - 1);
+            QuickSortByValue(list, pivot + 1, last);
 
+        }
+
+        for (int i = 0; i < list.Count - 1; i++) 
+        {
+            Debug.Log("ID: " + list[i].ID + "\nName: " + list[i].Name + "\nValue: " + list[i].value);
         }
     }
 }
