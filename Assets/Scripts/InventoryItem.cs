@@ -9,6 +9,14 @@ public class InventoryItem : MonoBehaviour
     private int value;
 
 
+
+
+    public InventoryItem(int ID, string Name, int value)
+    {
+        this.ID = ID;
+        this.Name = Name;
+        this.value = value;
+    }
     void Awake()
     {
 
@@ -24,4 +32,5 @@ public class InventoryItem : MonoBehaviour
     {
         
     }
+    int get
 }
