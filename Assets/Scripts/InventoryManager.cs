@@ -9,8 +9,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int inventoryItemValue;
 
     // Array of names for the inventory items.
-    private string[] inventoryNames = { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb",
-        "avery", "rifle", "computer", "mouse", "money", "elephant", "monitor", "water" };
+    private List<string> inventoryNames = new List<string> { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb",
+        "avery", "rifle", "computer", "mouse", "money", "elephant", "monitor", "water", "subaru" };
 
     // List of InventoryItems that will be used to store the inventory.
     private List <InventoryItem>inventoryList = new List<InventoryItem>();
@@ -35,7 +35,7 @@ public class InventoryManager : MonoBehaviour
             int result = BinarySearchByID(inventoryList, inventoryItemID);
             if (result > -1)
             {
-                Debug.Log($"Target value {inventoryItemID} found at {inventoryList[result].Name}");
+                Debug.Log($"Target ID, {inventoryItemID}, found with name of {inventoryList[result].Name} and value of {inventoryList[result].value}");
             }
             else
             {
@@ -53,14 +53,36 @@ public class InventoryManager : MonoBehaviour
     // Populate the inventory with random entries.
     private void InitializeInventory()
     {
-        int inventorySize = inventoryNames.Length;
-
-        // For each name in the inventoryNames array, create a new InventoryItem with a random ID and value.
-        for (int i = 0; i < inventorySize; i++)
+        // For each name in the inventoryNames list, create a new InventoryItem with a random ID and value.
+        for (int i = 0; i < inventoryNames.Count; i++)
         {
-            InventoryItem item = new InventoryItem(Random.Range(0, 73), inventoryNames[i], Random.Range(0, 100));
+            int randomID = Random.Range(0, 73);
+            int randomValue = Random.Range(0, 100);
 
+            // Once a randomID and randomValue are generated, check if they are already in the inventoryList.
+            for (int j = 0; j < inventoryList.Count; j++)
+            {
+                // If the randomID is already in the inventoryList, generate a new randomID and start the loop over.
+                if (inventoryList[j].ID == randomID)
+                {
+                    randomID = Random.Range(0, 73);
+                    j = 0;
+                }
+
+                // Else, if the randomValue is already in the inventoryList, generate a new randomValue and start the loop over.
+                else if (inventoryList[j].value == randomValue)
+                {
+                    randomValue = Random.Range(0, 100);
+                    j = 0;
+                }
+            }
+
+            // Create a new InventoryItem with the non-duplicate randomID, name, and randomValue.
+            InventoryItem item = new InventoryItem(randomID, inventoryNames[i], randomValue);
+
+            // Add the new InventoryItem to the inventoryList.
             inventoryList.Add(item);
+            //Debug.Log($"ID: {item.ID}, Name: {item.Name}, Value: {item.value}");
         }
     }
     
@@ -81,9 +103,20 @@ public class InventoryManager : MonoBehaviour
         Debug.Log($"{target} not found in the inventory.");
     }
 
-    // Binary Search Method
-    private static int BinarySearchByID(List<InventoryItem> list, int target)
+    // Search the inventory for the target ID using binary search.
+    static int BinarySearchByID(List<InventoryItem> list, int target)
     {
+        /// Summary of how the below List.Sort method works in this case:
+        /// The sort method begins by comparing the first two elements of the list, then the next two, and so on.
+        /// The two elements are compared based on their IDs. 
+        /// If x.ID is less than y.ID, it returns -1, which indicates to Sort that x should come before y.
+        /// If x.ID is greater than y.ID, it returns 1, which indicates to Sort that y should come before x.
+        /// If the two are equal, it returns 0, which indicates to Sort that it doesn't need to change their order.
+        /// Based on the returned value, Sort knows where each element should be placed.
+        
+        // Sort the list by ID before performing the binary search, which is necessary for the binary search to work correctly.
+        list.Sort((x, y) => x.ID.CompareTo(y.ID));
+
         int left = 0;
         int right = list.Count - 1;
 
