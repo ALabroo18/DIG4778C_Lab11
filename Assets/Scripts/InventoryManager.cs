@@ -9,8 +9,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int inventoryItemValue;
 
     // Array of names for the inventory items.
-    private string[] inventoryNames = { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb", 
-        "avery", "rifle", "computer", "mouse", "money" };
+    private string[] inventoryNames = { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb",
+        "avery", "rifle", "computer", "mouse", "money", "elephant", "monitor", "water" };
 
     // List of InventoryItems that will be used to store the inventory.
     private List <InventoryItem>inventoryList = new List<InventoryItem>();
@@ -58,13 +58,12 @@ public class InventoryManager : MonoBehaviour
         // For each name in the inventoryNames array, create a new InventoryItem with a random ID and value.
         for (int i = 0; i < inventorySize; i++)
         {
-            InventoryItem item = new InventoryItem(Random.Range(0, 73), inventoryNames[Random.Range(0, inventoryNames.Length - 1)], 
-                Random.Range(0, 100));
+            InventoryItem item = new InventoryItem(Random.Range(0, 73), inventoryNames[i], Random.Range(0, 100));
 
             inventoryList.Add(item);
         }
     }
-
+    
     // Search the inventory for the target name using linear search.
     private void LinearSearchByName(List<InventoryItem> list, string target)
     {
@@ -73,7 +72,7 @@ public class InventoryManager : MonoBehaviour
             if (list[i].Name == target)
             {
                 // If the target is found, debug where it was found and exit the funciton.
-                Debug.Log($"{target} found at index {i} in the inventory.");
+                Debug.Log($"{target} found in the inventory with an ID of {list[i].ID} and a value of {list[i].value}.");
                 return;
             }
         }
