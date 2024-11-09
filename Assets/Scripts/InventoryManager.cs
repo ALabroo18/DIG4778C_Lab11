@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ public class InventoryManager : MonoBehaviour
     // Name the user inputs in the inspector to see if the inventory contains it.
     [SerializeField] private string inventoryItemName;
     [SerializeField] private int inventoryItemID;
-    [SerializeField] private int inventoryItemValue;
 
     // Array of names for the inventory items.
     private List<string> inventoryNames = new List<string> { "liam", "anish", "dylan", "prof. sengun", "marcus", "seb",
@@ -45,8 +45,13 @@ public class InventoryManager : MonoBehaviour
         // TO DO: If Q key is pressed, perform a quick sort 
         else if (Input.GetKeyDown(KeyCode.Q)) 
         {
-            //partition(inventoryList, 0, inventoryList.Count - 1);
             QuickSortByValue(inventoryList, 0, inventoryList.Count - 1);
+
+            for (int i = 0; i < inventoryList.Count - 1; i++)
+            {
+                Debug.Log("ID: " + inventoryList[i].ID + "\nValue: " + inventoryList[i].value + "\nName: " + inventoryList[i].Name);
+            }
+
         }
     }
 
@@ -151,9 +156,10 @@ public class InventoryManager : MonoBehaviour
         {
             if (list[element].value < pivotItem.value)
             {
-                element++;
+                //element++;
+                smaller++;
 
-                InventoryItem temporary = list[smaller + 1];
+                InventoryItem temporary = list[smaller];
                 list[smaller] = list[element];
                 list[element] = temporary;
             }
@@ -169,18 +175,13 @@ public class InventoryManager : MonoBehaviour
     // TO DO: Quick Sort Method
     public void QuickSortByValue(List<InventoryItem> list, int first, int last)
     {
-        if (list[first].value < list[last].value)
+        if (first < last)
         {
             int pivot = partition(list, first, last);
 
             QuickSortByValue(list, first, pivot - 1);
             QuickSortByValue(list, pivot + 1, last);
 
-        }
-
-        for (int i = 0; i < list.Count - 1; i++) 
-        {
-            Debug.Log("ID: " + list[i].ID + "\nName: " + list[i].Name + "\nValue: " + list[i].value);
         }
     }
 }
